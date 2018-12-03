@@ -19,7 +19,7 @@ exports.handler = async message => {
   console.log(`Adding user to table ${process.env.TABLE_NAME}`);
   const result = await dynamodb.put(params).promise();
   console.log(`User added to table, done`);
-  console.log(`RESULT: ${result}`);
+  console.log(`RESULT: ${JSON.stringify(result)}`);
 
   return {
     statusCode: 200,
