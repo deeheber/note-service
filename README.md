@@ -5,7 +5,9 @@ A serverless demo CRUD API microservice powered by AWS SAM, API Gateway, Lambda 
 Created with the help of [Stackery](https://www.stackery.io/)
 
 ## TODO
-[ ] GET /note/{ id }
-[ ] PUT /note/{ id }
-[ ] DELETE /note/{ id }
-[ ] Add error handling in functions
+- [x] GET /note/ (list all notes)
+- [x] POST /note (create note)
+- [ ] GET /note/{ id } (get a single note)
+- [ ] PUT /note/{ id } (update a note)
+- [ ] DELETE /note/{ id } (delete a note)
+- [ ] Add error handling for functions
