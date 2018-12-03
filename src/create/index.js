@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB();
+const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async message => {
   console.log(message);
@@ -17,7 +17,7 @@ exports.handler = async message => {
   };
 
   console.log(`Adding user to table ${process.env.TABLE_NAME}`);
-  const result = await dynamodb.putItem(params).promise();
+  const result = await dynamodb.put(params).promise();
   console.log(`User added to table, done`);
   console.log(`RESULT: ${result}`);
 
