@@ -23,13 +23,17 @@ exports.handler = async (event, context, callback) => {
     console.log(`User added to table, done`);
     callback(null, {
       statusCode: 200,
-      headers: {},
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
       body: params.Item
     });
   } catch (err) {
     callback(null, {
       statusCode: 500,
-      headers: {},
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
       body: err
     });
   }
