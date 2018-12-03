@@ -18,24 +18,12 @@ exports.handler = async event => {
 
   console.log(`Adding user to table ${process.env.TABLE_NAME}`);
 
-  try {
-    await dynamodb.put(params).promise();
-    console.log(`User added to table, done`);
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.strinfigy(params.Item)
-    };
-  } catch (err) {
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      body: JSON.stringify(err)
-    };
-  }
+  await dynamodb.put(params).promise();
+  console.log(`User added to table, done`);
+
+  return {
+    statusCode: 200,
+    headers: {},
+    body: JSON.strinfigy(params.Item)
+  };
 };
