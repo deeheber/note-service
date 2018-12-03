@@ -1,5 +1,9 @@
 exports.handler = async message => {
   console.log(message);
 
-  return { it: 'works' };
+  return {
+    statusCode: 200,
+    headers: {},
+    body: JSON.stringify({ it: 'works' })
+  };
 };
