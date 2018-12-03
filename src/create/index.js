@@ -26,15 +26,16 @@ exports.handler = async (event, context, callback) => {
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
-      body: params.Item
+      body: JSON.strinfigy(params.Item)
     });
   } catch (err) {
     callback(null, {
       statusCode: 500,
       headers: {
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
       },
-      body: err
+      body: JSON.stringify(err)
     });
   }
 };
