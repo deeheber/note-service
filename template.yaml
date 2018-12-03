@@ -17,17 +17,17 @@ Resources:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function64822C9F.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${list.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
-  function64822C9F:
+  list:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-function64822C9F
+      FunctionName: !Sub ${AWS::StackName}-list
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
-        - ResourceName: function64822C9F
-      CodeUri: src/function64822C9F
+        - ResourceName: list
+      CodeUri: src/list
       Handler: index.handler
       Runtime: nodejs8.10
       MemorySize: 3008
