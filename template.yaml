@@ -1,3 +1,54 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
-Resources: {}
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  apiAB3BF2FE:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub
+        - ${ResourceName} From Stack ${StackTagName} Environment ${EnvironmentTagName}
+        - ResourceName: apiAB3BF2FE
+      StageName: !Ref EnvironmentAPIGatewayStageName
+      DefinitionBody:
+        openapi: '3.0'
+        info: {}
+        paths:
+          /note:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function64822C9F.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
+  function64822C9F:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-function64822C9F
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: function64822C9F
+      CodeUri: src/function64822C9F
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+      Events:
+        apiAB3BF2FEGETnote:
+          Type: Api
+          Properties:
+            Path: /note
+            Method: GET
+            RestApiId: !Ref apiAB3BF2FE
+Parameters:
+  StackTagName:
+    Type: String
+    Description: Stack Name (injected by Stackery at deployment time)
+  EnvironmentTagName:
+    Type: String
+    Description: Environment Name (injected by Stackery at deployment time)
+  EnvironmentAPIGatewayStageName:
+    Type: String
+    Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)
