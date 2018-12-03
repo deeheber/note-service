@@ -41,6 +41,8 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref table5D44E44A
       Events:
         apiAB3BF2FEGETnote:
           Type: Api
@@ -48,6 +50,10 @@ Resources:
             Path: /note
             Method: GET
             RestApiId: !Ref apiAB3BF2FE
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref table5D44E44A
+          TABLE_ARN: !GetAtt table5D44E44A.Arn
     Metadata:
       StackeryName: list
   create:
@@ -65,6 +71,8 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref table5D44E44A
       Events:
         apiAB3BF2FEPOSTnote:
           Type: Api
@@ -72,8 +80,29 @@ Resources:
             Path: /note
             Method: POST
             RestApiId: !Ref apiAB3BF2FE
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref table5D44E44A
+          TABLE_ARN: !GetAtt table5D44E44A.Arn
     Metadata:
       StackeryName: create
+  table5D44E44A:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      TableName: !Sub ${AWS::StackName}-table5D44E44A
+    Metadata:
+      StackeryName: notesTable
 Parameters:
   StackTagName:
     Type: String
