@@ -1,5 +1,5 @@
 exports.handler = async message => {
   console.log(message);
 
-  return {};
-}
+  return { it: 'works' };
+};
