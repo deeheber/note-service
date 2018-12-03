@@ -17,7 +17,6 @@ exports.handler = async event => {
   };
 
   console.log(`Adding user to table ${process.env.TABLE_NAME}`);
-
   await dynamodb.put(params).promise();
   console.log(`User added to table, done`);
 
