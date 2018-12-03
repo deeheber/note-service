@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async event => {
   console.log(event);
   const data = JSON.parse(event.body);
 
@@ -21,21 +21,21 @@ exports.handler = async (event, context, callback) => {
   try {
     await dynamodb.put(params).promise();
     console.log(`User added to table, done`);
-    callback(null, {
+    return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
       body: JSON.strinfigy(params.Item)
-    });
+    };
   } catch (err) {
-    callback(null, {
+    return {
       statusCode: 500,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify(err)
-    });
+    };
   }
 };
