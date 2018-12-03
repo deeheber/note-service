@@ -2,9 +2,9 @@ const uuid = require('uuid');
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = async message => {
-  console.log(message);
-  const data = JSON.parse(message.body);
+exports.handler = async event => {
+  console.log(event);
+  const data = JSON.parse(event.body);
 
   const params = {
     TableName: process.env.TABLE_NAME,
@@ -17,13 +17,20 @@ exports.handler = async message => {
   };
 
   console.log(`Adding user to table ${process.env.TABLE_NAME}`);
-  const result = await dynamodb.put(params).promise();
-  console.log(`User added to table, done`);
-  console.log(`RESULT: ${JSON.stringify(result)}`);
 
-  return {
-    statusCode: 200,
-    headers: {},
-    body: JSON.stringify({ it: 'works --- create function' })
-  };
+  try {
+    await dynamodb.put(params).promise();
+    console.log(`User added to table, done`);
+    return {
+      statusCode: 200,
+      headers: {},
+      body: params.Item
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers: {},
+      body: err
+    };
+  }
 };
