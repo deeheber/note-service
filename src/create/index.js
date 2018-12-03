@@ -21,6 +21,8 @@ exports.handler = async event => {
   await dynamodb.put(params).promise();
   console.log(`User added to table, done`);
 
+  // TODO: add in error handling
+  // Disable cors if in prod
   return {
     statusCode: 200,
     headers: {
