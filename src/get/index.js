@@ -6,7 +6,7 @@ exports.handler = async event => {
 
   const params = {
     TableName: process.env.TABLE_NAME,
-    Key: event.pathParameters.id
+    Key: { id: event.pathParameters.id }
   };
 
   const result = await dynamodb.get(params).promise();
