@@ -25,6 +25,13 @@ Resources:
                 type: aws_proxy
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${create.Arn}/invocations
               responses: {}
+          /note/{id}:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${get.Arn}/invocations
+              responses: {}
       EndpointConfiguration: REGIONAL
   list:
     Type: AWS::Serverless::Function
@@ -103,6 +110,34 @@ Resources:
       TableName: !Sub ${AWS::StackName}-table5D44E44A
     Metadata:
       StackeryName: notesTable
+  get:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-get
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: get
+      CodeUri: src/get
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref table5D44E44A
+      Events:
+        apiAB3BF2FEGETnoteid:
+          Type: Api
+          Properties:
+            Path: /note/{id}
+            Method: GET
+            RestApiId: !Ref apiAB3BF2FE
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref table5D44E44A
+          TABLE_ARN: !GetAtt table5D44E44A.Arn
 Parameters:
   StackTagName:
     Type: String
