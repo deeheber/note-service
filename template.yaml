@@ -138,6 +138,8 @@ Resources:
         Variables:
           TABLE_NAME: !Ref table5D44E44A
           TABLE_ARN: !GetAtt table5D44E44A.Arn
+    Metadata:
+      StackeryName: get
 Parameters:
   StackTagName:
     Type: String
