@@ -8,9 +8,10 @@ exports.handler = async event => {
   const params = {
     TableName: process.env.TABLE_NAME,
     Key: { id: event.pathParameters.id },
-    UpdateExpression: 'SET content = :content',
+    UpdateExpression: 'SET content = :content, updatedAt = :updatedAt',
     ExpressionAttributeValues: {
-      ':content': data.content ? data.content : null
+      ':content': data.content ? data.content : null,
+      ':updatedAt': new Date().getTime()
     },
     ReturnValues: 'ALL_NEW'
   };
