@@ -212,10 +212,10 @@ Resources:
             RestApiId: !Ref apiAB3BF2FE
     Metadata:
       StackeryName: remove
-  functionC411ADBA:
+  errorLogger:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-functionC411ADBA
+      FunctionName: !Sub ${AWS::StackName}-errorLogger
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
         - ResourceName: errorLogger
@@ -241,4 +241,4 @@ Parameters:
     Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)
 Metadata:
   StackeryErrorsTargets:
-    functionC411ADBA: {}
+    errorLogger: {}
