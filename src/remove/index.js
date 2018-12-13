@@ -13,7 +13,6 @@ exports.handler = async event => {
   const result = await dynamodb.delete(params).promise();
   console.log(`Note deleted in table, done`);
 
-  // TODO: add in error handling
   return {
     statusCode: 200,
     headers: {},

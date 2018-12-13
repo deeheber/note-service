@@ -11,9 +11,6 @@ exports.handler = async event => {
 
   const result = await dynamodb.scan(params).promise();
 
-  throw new Error('This is an error message');
-
-  // TODO add in error handling
   return {
     statusCode: 200,
     headers: {},

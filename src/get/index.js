@@ -11,7 +11,6 @@ exports.handler = async event => {
 
   const result = await dynamodb.get(params).promise();
 
-  // TODO add in error handling
   return {
     statusCode: 200,
     headers: {},

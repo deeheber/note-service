@@ -20,7 +20,6 @@ exports.handler = async event => {
   await dynamodb.put(params).promise();
   console.log(`Note added to table, done`);
 
-  // TODO: add in error handling
   return {
     statusCode: 200,
     headers: {},
