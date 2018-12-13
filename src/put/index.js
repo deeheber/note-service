@@ -16,13 +16,15 @@ exports.handler = async event => {
   };
 
   console.log(`Updating note in table ${process.env.TABLE_NAME}`);
-  await dynamodb.update(params).promise();
+  const result = await dynamodb.update(params).promise();
   console.log(`Note updated in table, done`);
+  console.log('RESULT: ', result);
 
   // TODO: add in error handling
+  // TODO: return the new item in the body
   return {
     statusCode: 200,
     headers: {},
-    body: JSON.stringify(params.Item)
+    body: JSON.stringify({})
   };
 };
