@@ -38,6 +38,12 @@ Resources:
                 type: aws_proxy
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${update.Arn}/invocations
               responses: {}
+            delete:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${remove.Arn}/invocations
+              responses: {}
       EndpointConfiguration: REGIONAL
   list:
     Type: AWS::Serverless::Function
@@ -176,6 +182,36 @@ Resources:
           TABLE_ARN: !GetAtt table5D44E44A.Arn
     Metadata:
       StackeryName: update
+  remove:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-remove
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: remove
+      CodeUri: src/remove
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref table5D44E44A
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref table5D44E44A
+          TABLE_ARN: !GetAtt table5D44E44A.Arn
+      Events:
+        apiAB3BF2FEDELETEnoteid:
+          Type: Api
+          Properties:
+            Path: /note/{id}
+            Method: DELETE
+            RestApiId: !Ref apiAB3BF2FE
+    Metadata:
+      StackeryName: remove
 Parameters:
   StackTagName:
     Type: String
