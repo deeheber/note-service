@@ -36,7 +36,7 @@ Resources:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${put.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${update.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
   list:
@@ -146,14 +146,14 @@ Resources:
           TABLE_ARN: !GetAtt table5D44E44A.Arn
     Metadata:
       StackeryName: get
-  put:
+  update:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-put
+      FunctionName: !Sub ${AWS::StackName}-update
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
-        - ResourceName: put
-      CodeUri: src/put
+        - ResourceName: update
+      CodeUri: src/update
       Handler: index.handler
       Runtime: nodejs8.10
       MemorySize: 3008
@@ -175,7 +175,7 @@ Resources:
           TABLE_NAME: !Ref table5D44E44A
           TABLE_ARN: !GetAtt table5D44E44A.Arn
     Metadata:
-      StackeryName: put
+      StackeryName: update
 Parameters:
   StackTagName:
     Type: String
