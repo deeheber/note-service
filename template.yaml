@@ -32,6 +32,12 @@ Resources:
                 type: aws_proxy
                 uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${get.Arn}/invocations
               responses: {}
+            put:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${put.Arn}/invocations
+              responses: {}
       EndpointConfiguration: REGIONAL
   list:
     Type: AWS::Serverless::Function
@@ -140,6 +146,30 @@ Resources:
           TABLE_ARN: !GetAtt table5D44E44A.Arn
     Metadata:
       StackeryName: get
+  put:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-put
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
+        - ResourceName: put
+      CodeUri: src/put
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+      Events:
+        apiAB3BF2FEPUTnoteid:
+          Type: Api
+          Properties:
+            Path: /note/{id}
+            Method: PUT
+            RestApiId: !Ref apiAB3BF2FE
+    Metadata:
+      StackeryName: put
 Parameters:
   StackTagName:
     Type: String
