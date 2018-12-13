@@ -161,6 +161,8 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
+        - DynamoDBCrudPolicy:
+            TableName: !Ref table5D44E44A
       Events:
         apiAB3BF2FEPUTnoteid:
           Type: Api
@@ -168,6 +170,10 @@ Resources:
             Path: /note/{id}
             Method: PUT
             RestApiId: !Ref apiAB3BF2FE
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref table5D44E44A
+          TABLE_ARN: !GetAtt table5D44E44A.Arn
     Metadata:
       StackeryName: put
 Parameters:
