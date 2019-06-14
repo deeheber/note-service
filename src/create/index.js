@@ -3,7 +3,8 @@ const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async event => {
-  console.log(event);
+  // Log the event argument for debugging and for use in local development.
+  console.log(JSON.stringify(event, undefined, 2));
   const data = JSON.parse(event.body);
 
   const params = {

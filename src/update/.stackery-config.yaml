@@ -1,0 +1,4 @@
+function-id: update
+template-path: ../../template.yaml
+aws-profile: test
+env-name: development
