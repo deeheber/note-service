@@ -10,11 +10,21 @@ exports.handler = async event => {
     Select: 'ALL_ATTRIBUTES'
   };
 
-  const result = await dynamodb.scan(params).promise();
+  let response;
+  let statusCode;
+  try {
+    const { Items } = await dynamodb.scan(params).promise();
+    response = Items;
+    statusCode = 200;
+  } catch (err) {
+    console.log(`ERROR: ${JSON.stringify(err.message, undefined, 2)}`);
+    response = err.message;
+    statusCode = err.statusCode || 500;
+  }
 
   return {
-    statusCode: 200,
+    statusCode,
     headers: {},
-    body: JSON.stringify(result.Items)
+    body: JSON.stringify(response)
   };
 };
