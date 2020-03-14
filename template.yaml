@@ -212,23 +212,6 @@ Resources:
             RestApiId: !Ref apiAB3BF2FE
     Metadata:
       StackeryName: remove
-  errorLogger:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-errorLogger
-      Description: !Sub
-        - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
-        - ResourceName: errorLogger
-      CodeUri: src/errorLogger
-      Handler: index.handler
-      Runtime: nodejs10.x
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-    Metadata:
-      StackeryName: errorLogger
 Parameters:
   StackTagName:
     Type: String
