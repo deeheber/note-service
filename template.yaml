@@ -54,7 +54,7 @@ Resources:
         - ResourceName: list
       CodeUri: src/list
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -84,7 +84,7 @@ Resources:
         - ResourceName: create
       CodeUri: src/create
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -131,7 +131,7 @@ Resources:
         - ResourceName: get
       CodeUri: src/get
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -161,7 +161,7 @@ Resources:
         - ResourceName: update
       CodeUri: src/update
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -191,7 +191,7 @@ Resources:
         - ResourceName: remove
       CodeUri: src/remove
       Handler: index.handler
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -222,6 +222,3 @@ Parameters:
   EnvironmentAPIGatewayStageName:
     Type: String
     Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)
-Metadata:
-  StackeryErrorsTargets:
-    errorLogger: {}
