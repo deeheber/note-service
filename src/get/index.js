@@ -10,11 +10,28 @@ exports.handler = async event => {
     Key: { id: event.pathParameters.id }
   };
 
-  const result = await dynamodb.get(params).promise();
+  let response;
+  let statusCode;
+  try {
+    const { Item } = await dynamodb.get(params).promise();
+
+    if (!Item) {
+      statusCode = 404;
+      response = 'Item not found';
+    } else {
+      response = Item;
+      statusCode = 200;
+      console.log(`SUCCESS GETTING ITEM: ${event.pathParameters.id}`);
+    }
+  } catch (err) {
+    console.log(`ERROR: ${JSON.stringify(err.message, undefined, 2)}`);
+    response = err.message;
+    statusCode = err.statusCode || 500;
+  }
 
   return {
-    statusCode: 200,
+    statusCode,
     headers: {},
-    body: JSON.stringify(result.Item)
+    body: JSON.stringify(response)
   };
 };
