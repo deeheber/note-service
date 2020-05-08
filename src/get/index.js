@@ -17,7 +17,7 @@ exports.handler = async event => {
 
     if (!Item) {
       statusCode = 404;
-      response = 'Item not found';
+      response = { message: 'Item not found' };
     } else {
       response = Item;
       statusCode = 200;
@@ -25,13 +25,12 @@ exports.handler = async event => {
     }
   } catch (err) {
     console.log(`ERROR: ${JSON.stringify(err.message, undefined, 2)}`);
-    response = err.message;
+    response = { message: err.message };
     statusCode = err.statusCode || 500;
   }
 
   return {
     statusCode,
-    headers: {},
     body: JSON.stringify(response)
   };
 };

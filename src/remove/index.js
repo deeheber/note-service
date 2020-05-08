@@ -25,14 +25,13 @@ exports.handler = async event => {
     console.log(`ERROR: ${JSON.stringify(err.message, undefined, 2)}`);
     response = err.message;
     if (err.code === 'ConditionalCheckFailedException') {
-      response = 'Item not found, unable to delete';
+      response = { message: 'Item not found, unable to delete' };
     }
     statusCode = err.statusCode || 500;
   }
 
   return {
     statusCode,
-    headers: {},
     body: JSON.stringify(response)
   };
 };
