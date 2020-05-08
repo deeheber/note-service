@@ -1,50 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  apiAB3BF2FE:
-    Type: AWS::Serverless::Api
-    Properties:
-      Name: !Sub
-        - ${ResourceName} From Stack ${StackTagName} Environment ${EnvironmentTagName}
-        - ResourceName: apiAB3BF2FE
-      StageName: !Ref EnvironmentAPIGatewayStageName
-      DefinitionBody:
-        openapi: '3.0'
-        info: {}
-        paths:
-          /note:
-            get:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${list.Arn}/invocations
-              responses: {}
-            post:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${create.Arn}/invocations
-              responses: {}
-          /note/{id}:
-            get:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${get.Arn}/invocations
-              responses: {}
-            put:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${update.Arn}/invocations
-              responses: {}
-            delete:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${remove.Arn}/invocations
-              responses: {}
-      EndpointConfiguration: REGIONAL
   list:
     Type: AWS::Serverless::Function
     Properties:
@@ -62,17 +18,19 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
             TableName: !Ref notesTable
-      Events:
-        apiAB3BF2FEGETnote:
-          Type: Api
-          Properties:
-            Path: /note
-            Method: GET
-            RestApiId: !Ref apiAB3BF2FE
       Environment:
         Variables:
           TABLE_NAME: !Ref notesTable
           TABLE_ARN: !GetAtt notesTable.Arn
+      Events:
+        HttpApiGETnote:
+          Type: HttpApi
+          Properties:
+            Path: /note
+            Method: GET
+            ApiId: !Ref HttpApi
+            PayloadFormatVersion: '2.0'
+            TimeoutInMillis: 29000
     Metadata:
       StackeryName: list
   create:
@@ -92,17 +50,19 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
             TableName: !Ref notesTable
-      Events:
-        apiAB3BF2FEPOSTnote:
-          Type: Api
-          Properties:
-            Path: /note
-            Method: POST
-            RestApiId: !Ref apiAB3BF2FE
       Environment:
         Variables:
           TABLE_NAME: !Ref notesTable
           TABLE_ARN: !GetAtt notesTable.Arn
+      Events:
+        HttpApiPOSTnote:
+          Type: HttpApi
+          Properties:
+            Path: /note
+            Method: POST
+            ApiId: !Ref HttpApi
+            PayloadFormatVersion: '2.0'
+            TimeoutInMillis: 29000
     Metadata:
       StackeryName: create
   notesTable:
@@ -139,17 +99,19 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
             TableName: !Ref notesTable
-      Events:
-        apiAB3BF2FEGETnoteid:
-          Type: Api
-          Properties:
-            Path: /note/{id}
-            Method: GET
-            RestApiId: !Ref apiAB3BF2FE
       Environment:
         Variables:
           TABLE_NAME: !Ref notesTable
           TABLE_ARN: !GetAtt notesTable.Arn
+      Events:
+        HttpApiGETnoteid:
+          Type: HttpApi
+          Properties:
+            Path: /note/{id}
+            Method: GET
+            ApiId: !Ref HttpApi
+            PayloadFormatVersion: '2.0'
+            TimeoutInMillis: 29000
     Metadata:
       StackeryName: get
   update:
@@ -169,17 +131,19 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - DynamoDBCrudPolicy:
             TableName: !Ref notesTable
-      Events:
-        apiAB3BF2FEPUTnoteid:
-          Type: Api
-          Properties:
-            Path: /note/{id}
-            Method: PUT
-            RestApiId: !Ref apiAB3BF2FE
       Environment:
         Variables:
           TABLE_NAME: !Ref notesTable
           TABLE_ARN: !GetAtt notesTable.Arn
+      Events:
+        HttpApiPUTnoteid:
+          Type: HttpApi
+          Properties:
+            Path: /note/{id}
+            Method: PUT
+            ApiId: !Ref HttpApi
+            PayloadFormatVersion: '2.0'
+            TimeoutInMillis: 29000
     Metadata:
       StackeryName: update
   remove:
@@ -204,14 +168,38 @@ Resources:
           TABLE_NAME: !Ref notesTable
           TABLE_ARN: !GetAtt notesTable.Arn
       Events:
-        apiAB3BF2FEDELETEnoteid:
-          Type: Api
+        HttpApiDELETEnoteid:
+          Type: HttpApi
           Properties:
             Path: /note/{id}
             Method: DELETE
-            RestApiId: !Ref apiAB3BF2FE
+            ApiId: !Ref HttpApi
+            PayloadFormatVersion: '2.0'
+            TimeoutInMillis: 29000
     Metadata:
       StackeryName: remove
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      DefinitionBody:
+        openapi: '3.0'
+        info:
+          title: !Sub ${AWS::StackName}-HttpApi
+          version: '1.0'
+        paths:
+          /note:
+            get:
+              responses: {}
+            post:
+              responses: {}
+          /note/{id}:
+            put:
+              responses: {}
+            delete:
+              responses: {}
+            get:
+              responses: {}
+      FailOnWarnings: true
 Parameters:
   StackTagName:
     Type: String
@@ -219,6 +207,3 @@ Parameters:
   EnvironmentTagName:
     Type: String
     Description: Environment Name (injected by Stackery at deployment time)
-  EnvironmentAPIGatewayStageName:
-    Type: String
-    Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)

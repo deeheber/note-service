@@ -29,16 +29,15 @@ exports.handler = async event => {
     statusCode = 200;
   } catch (err) {
     console.log(`ERROR: ${JSON.stringify(err.message, undefined, 2)}`);
-    response = err.message;
+    response = { message: err.message };
     if (err.code === 'ConditionalCheckFailedException') {
-      response = 'Item not found, unable to update';
+      response = { message: 'Item not found, unable to update' };
     }
     statusCode = err.statusCode || 500;
   }
 
   return {
     statusCode,
-    headers: {},
     body: JSON.stringify(response)
   };
 };

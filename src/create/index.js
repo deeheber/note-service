@@ -19,11 +19,10 @@ exports.handler = async event => {
 
   console.log(`Adding note to table ${process.env.TABLE_NAME}`);
   await dynamodb.put(params).promise();
-  console.log(`Note added to table, done`);
+  console.log('Note added to table, done');
 
   return {
     statusCode: 200,
-    headers: {},
     body: JSON.stringify(params.Item)
   };
 };
