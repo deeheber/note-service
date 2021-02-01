@@ -1,6 +1,7 @@
-const uuid = require('uuid');
-const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const { v4: uuidv4 } = require('uuid');
+const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+
+const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 exports.handler = async event => {
   // Log the event argument for debugging and for use in local development.
@@ -10,15 +11,15 @@ exports.handler = async event => {
   const params = {
     TableName: process.env.TABLE_NAME,
     Item: {
-      id: uuid.v1(),
-      content: data.content,
-      author: data.author,
-      createdAt: new Date().getTime()
+      id: { S: uuidv4() },
+      content: { S: data.content },
+      author: { S: data.author },
+      createdAt: { S: new Date().getTime().toString() }
     }
   };
 
   console.log(`Adding note to table ${process.env.TABLE_NAME}`);
-  await dynamodb.put(params).promise();
+  await dbclient.send(new PutItemCommand(params));
   console.log('Note added to table, done');
 
   return {

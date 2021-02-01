@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+
+const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 exports.handler = async event => {
   // Log the event argument for debugging and for use in local development.
@@ -7,13 +8,15 @@ exports.handler = async event => {
 
   const params = {
     TableName: process.env.TABLE_NAME,
-    Key: { id: event.pathParameters.id }
+    Key: {
+      id: { S: event.pathParameters.id }
+    }
   };
 
   let response;
   let statusCode;
   try {
-    const { Item } = await dynamodb.get(params).promise();
+    const { Item } = await dbclient.send(new GetItemCommand(params));
 
     if (!Item) {
       statusCode = 404;
@@ -24,9 +27,9 @@ exports.handler = async event => {
       console.log(`SUCCESS GETTING ITEM: ${event.pathParameters.id}`);
     }
   } catch (err) {
-    console.log(`ERROR: ${JSON.stringify(err.message, undefined, 2)}`);
+    console.log(`ERROR: ${JSON.stringify(err, undefined, 2)}`);
     response = { message: err.message };
-    statusCode = err.statusCode || 500;
+    statusCode = err.$metadata.httpStatusCode || 500;
   }
 
   return {

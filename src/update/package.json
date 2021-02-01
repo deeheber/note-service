@@ -1,13 +1,12 @@
 {
-  "private": true,
-  "dependencies": {
-    "aws-sdk": "~2"
-  },
   "name": "update",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.4.1"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,7 @@
 const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const { DynamoDBClient, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+
+const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
 exports.handler = async event => {
   // Log the event argument for debugging and for use in local development.
@@ -8,9 +10,11 @@ exports.handler = async event => {
 
   const params = {
     TableName: process.env.TABLE_NAME,
-    Key: { id },
+    Key: {
+      id: { S: id }
+    },
     ExpressionAttributeValues: {
-      ':id': id
+      ':id': { S: id }
     },
     ConditionExpression: 'id = :id'
   };
@@ -18,16 +22,16 @@ exports.handler = async event => {
   let response;
   let statusCode;
   try {
-    await dynamodb.delete(params).promise();
+    await dbclient.send(new DeleteItemCommand(params));
     response = { id };
     statusCode = 200;
   } catch (err) {
-    console.log(`ERROR: ${JSON.stringify(err.message, undefined, 2)}`);
-    response = err.message;
-    if (err.code === 'ConditionalCheckFailedException') {
+    console.log(`ERROR: ${JSON.stringify(err, undefined, 2)}`);
+    response = { message: err.message };
+    if (err.name === 'ConditionalCheckFailedException') {
       response = { message: 'Item not found, unable to delete' };
     }
-    statusCode = err.statusCode || 500;
+    statusCode = err.$metadata.httpStatusCode || 500;
   }
 
   return {
