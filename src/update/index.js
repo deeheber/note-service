@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { DynamoDBClient, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
+const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 
 const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -11,15 +12,13 @@ exports.handler = async event => {
 
   const params = {
     TableName: process.env.TABLE_NAME,
-    Key: { 
-      id: { S: id }
-     },
+    Key: marshall({ id }),
     UpdateExpression: 'SET content = :content, updatedAt = :updatedAt',
-    ExpressionAttributeValues: {
-      ':content': { S: data.content },
-      ':updatedAt': { S: new Date().getTime().toString() },
-      ':id': { S: id }
-    },
+    ExpressionAttributeValues: marshall({
+      ':content': data.content,
+      ':updatedAt': new Date().getTime().toString(),
+      ':id': id
+    }),
     ConditionExpression: 'id = :id',
     ReturnValues: 'ALL_NEW'
   };
@@ -27,9 +26,8 @@ exports.handler = async event => {
   let response;
   let statusCode;
   try {
-    const result = await dbclient.send(new UpdateItemCommand(params));
-    console.log('result ', result);
-    response = result.Attributes;
+    const { Attributes } = await dbclient.send(new UpdateItemCommand(params));
+    response = unmarshall(Attributes);
     statusCode = 200;
   } catch (err) {
     console.log(`ERROR: ${JSON.stringify(err, undefined, 2)}`);
@@ -37,7 +35,7 @@ exports.handler = async event => {
     if (err.name === 'ConditionalCheckFailedException') {
       response = { message: 'Item not found in the db, unable to update' };
     }
-    statusCode = err.$metadata.httpStatusCode || 500;;
+    statusCode = err.$metadata ? err.$metadata.httpStatusCode : 500;;
   }
 
   return {

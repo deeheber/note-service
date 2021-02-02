@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { DynamoDBClient, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+const { marshall } = require("@aws-sdk/util-dynamodb");
 
 const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -10,12 +11,10 @@ exports.handler = async event => {
 
   const params = {
     TableName: process.env.TABLE_NAME,
-    Key: {
-      id: { S: id }
-    },
-    ExpressionAttributeValues: {
-      ':id': { S: id }
-    },
+    Key: marshall({ id }),
+    ExpressionAttributeValues: marshall({
+      ':id': id
+    }),
     ConditionExpression: 'id = :id'
   };
 
@@ -31,7 +30,7 @@ exports.handler = async event => {
     if (err.name === 'ConditionalCheckFailedException') {
       response = { message: 'Item not found, unable to delete' };
     }
-    statusCode = err.$metadata.httpStatusCode || 500;
+    statusCode = err.$metadata ? err.$metadata.httpStatusCode : 500;
   }
 
   return {

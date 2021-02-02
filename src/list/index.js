@@ -2,6 +2,7 @@
 // This is just a sandbox experiment with a smaller table
 // If you have a larger table, use Query and paginate the responses
 const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
+const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
 const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -17,13 +18,16 @@ exports.handler = async event => {
   let response;
   let statusCode;
   try {
-    const { Items } = await dbclient.send(new ScanCommand(params));
-    response = Items;
+    const { Count, Items } = await dbclient.send(new ScanCommand(params));
+    response = {
+      total: Count,
+      items: Items.map(item => unmarshall(item))
+    };
     statusCode = 200;
   } catch (err) {
     console.log(`ERROR: ${JSON.stringify(err, undefined, 2)}`);
     response = err.message;
-    statusCode = err.$metadata.httpStatusCode || 500;
+    statusCode = err.$metadata ? err.$metadata.httpStatusCode : 500;
   }
 
   return {
