@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const { DynamoDBClient, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall } = require("@aws-sdk/util-dynamodb");
 
