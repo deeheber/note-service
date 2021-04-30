@@ -1,4 +1,2 @@
 function-id: remove
 template-path: ../../template.yaml
-aws-profile: test
-env-name: development
