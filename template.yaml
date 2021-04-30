@@ -10,7 +10,7 @@ Resources:
         - ResourceName: list
       CodeUri: src/list
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -40,7 +40,7 @@ Resources:
         - ResourceName: create
       CodeUri: src/create
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -83,7 +83,7 @@ Resources:
         - ResourceName: get
       CodeUri: src/get
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -113,7 +113,7 @@ Resources:
         - ResourceName: update
       CodeUri: src/update
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -143,7 +143,7 @@ Resources:
         - ResourceName: remove
       CodeUri: src/remove
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
