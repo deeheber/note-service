@@ -1,8 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
-const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
-const { marshall } = require("@aws-sdk/util-dynamodb");
-
-const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
 
 exports.handler = async event => {
   // Log the event argument for debugging and for use in local development.
@@ -17,11 +15,14 @@ exports.handler = async event => {
 
   const params = {
     TableName: process.env.TABLE_NAME,
-    Item: marshall(input)
+    Item: input
   };
 
+  const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+  const ddbDocClient = DynamoDBDocumentClient.from(client);
+
   console.log(`Adding note to table ${process.env.TABLE_NAME}`);
-  await dbclient.send(new PutItemCommand(params));
+  await ddbDocClient.send(new PutCommand(params));
   console.log('Note added to table, done');
 
   return {
