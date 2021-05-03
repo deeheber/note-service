@@ -1,10 +1,9 @@
 // Scaning an entire table can be slow and expensive on larger tables
 // This is just a sandbox experiment with a smaller table
 // If you have a larger table, use Query and paginate the responses
-const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
-const { unmarshall } = require("@aws-sdk/util-dynamodb");
-
-const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+// @ts-ignore: Cannot redeclare block-scoped variable
+const { DynamoDBDocumentClient, ScanCommand } = require("@aws-sdk/lib-dynamodb");
 
 exports.handler = async event => {
   // Log the event argument for debugging and for use in local development.
@@ -15,13 +14,16 @@ exports.handler = async event => {
     Select: 'ALL_ATTRIBUTES'
   };
 
+  const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+  const ddbDocClient = DynamoDBDocumentClient.from(client);
+
   let response;
   let statusCode;
   try {
-    const { Count, Items } = await dbclient.send(new ScanCommand(params));
+    const { Count, Items } = await ddbDocClient.send(new ScanCommand(params));
     response = {
       total: Count,
-      items: Items.map(item => unmarshall(item))
+      items: Items
     };
     statusCode = 200;
   } catch (err) {
