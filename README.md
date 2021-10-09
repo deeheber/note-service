@@ -15,3 +15,4 @@ A serverless demo CRUD API microservice powered by AWS SAM, API Gateway (HTTP AP
 ## Additional
 - Deploy this stack to your AWS account using the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started.html)
 - This is using the HTTP protocol of API Gateway, the `statusCode` and `headers` are optional in the Lambda responses.
+- Make sure to enable CORS in `template.yaml` if you want this to interact with a frontend. It should work out of the box with [curl](https://curl.se/docs/) or [Postman](https://www.postman.com/).
