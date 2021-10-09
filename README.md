@@ -2,8 +2,6 @@
 
 A serverless demo CRUD API microservice powered by AWS SAM, API Gateway (HTTP API), Lambda Functions, and DynamoDB
 
-`template.yaml` generated with the help of [Stackery](https://www.stackery.io/)
-
 ## Architecture
 ![note-api](https://user-images.githubusercontent.com/12616554/106798492-e6a5c480-6612-11eb-8be9-bdebc4ee5a73.png)
 
@@ -15,4 +13,5 @@ A serverless demo CRUD API microservice powered by AWS SAM, API Gateway (HTTP AP
 - DELETE /note/{ id } (delete a note)
 
 ## Additional
+- Deploy this stack to your AWS account using the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started.html)
 - This is using the HTTP protocol of API Gateway, the `statusCode` and `headers` are optional in the Lambda responses.

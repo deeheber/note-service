@@ -1,4 +1,3 @@
 node_modules
 .aws-sam/
-.stackery
 event.json
