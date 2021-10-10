@@ -2,7 +2,6 @@
 // This is just a sandbox experiment with a smaller table
 // If you have a larger table, use Query and paginate the responses
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-// @ts-ignore: Cannot redeclare block-scoped variable
 const { DynamoDBDocumentClient, ScanCommand } = require("@aws-sdk/lib-dynamodb");
 
 exports.handler = async event => {

@@ -1,4 +1,4 @@
 node_modules
 .aws-sam/
-.stackery
+samconfig.toml
 event.json
