@@ -8,9 +8,11 @@ Resources:
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
         - ResourceName: list
+      Architectures:
+        - arm64
       CodeUri: src/list
       Handler: index.handler
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -38,9 +40,11 @@ Resources:
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
         - ResourceName: create
+      Architectures:
+        - arm64
       CodeUri: src/create
       Handler: index.handler
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -81,9 +85,11 @@ Resources:
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
         - ResourceName: get
+      Architectures:
+        - arm64
       CodeUri: src/get
       Handler: index.handler
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -111,9 +117,11 @@ Resources:
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
         - ResourceName: update
+      Architectures:
+        - arm64
       CodeUri: src/update
       Handler: index.handler
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -141,9 +149,11 @@ Resources:
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
         - ResourceName: remove
+      Architectures:
+        - arm64
       CodeUri: src/remove
       Handler: index.handler
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -193,3 +203,7 @@ Parameters:
   EnvironmentTagName:
     Type: String
     Description: Environment Name
+Outputs:
+  ApiURL:
+    Description: The URL for the API
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
