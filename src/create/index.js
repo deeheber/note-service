@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
 
@@ -7,7 +7,7 @@ exports.handler = async event => {
   console.log(JSON.stringify(event, undefined, 2));
   const data = JSON.parse(event.body);
   const input = {
-    id: uuidv4(),
+    id: randomUUID(),
     content: data.content,
     author: data.author,
     createdAt: new Date().getTime().toString()

@@ -12,7 +12,7 @@ Resources:
         - arm64
       CodeUri: src/list
       Handler: index.handler
-      Runtime: nodejs16.x
+      Runtime: nodejs18.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -44,7 +44,7 @@ Resources:
         - arm64
       CodeUri: src/create
       Handler: index.handler
-      Runtime: nodejs16.x
+      Runtime: nodejs18.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -89,7 +89,7 @@ Resources:
         - arm64
       CodeUri: src/get
       Handler: index.handler
-      Runtime: nodejs16.x
+      Runtime: nodejs18.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -121,7 +121,7 @@ Resources:
         - arm64
       CodeUri: src/update
       Handler: index.handler
-      Runtime: nodejs16.x
+      Runtime: nodejs18.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
@@ -153,7 +153,7 @@ Resources:
         - arm64
       CodeUri: src/remove
       Handler: index.handler
-      Runtime: nodejs16.x
+      Runtime: nodejs18.x
       MemorySize: 3008
       Timeout: 30
       Tracing: Active
