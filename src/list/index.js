@@ -1,6 +1,3 @@
-// Scaning an entire table can be slow and expensive on larger tables
-// This is just a sandbox experiment with a smaller table
-// If you have a larger table, use Query and paginate the responses
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, ScanCommand } = require("@aws-sdk/lib-dynamodb");
 
@@ -19,6 +16,8 @@ exports.handler = async event => {
   let response;
   let statusCode;
   try {
+    // TODO: Doing scan for now, but this is expensive on large tables
+    // If you have a larger table, use Query and paginate the responses
     const { Count, Items } = await ddbDocClient.send(new ScanCommand(params));
     response = {
       total: Count,
