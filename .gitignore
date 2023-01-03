@@ -1,4 +1,5 @@
 node_modules
 .aws-sam/
+.aws-composer/
 samconfig.toml
 event.json
