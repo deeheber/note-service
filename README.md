@@ -3,9 +3,11 @@
 A serverless CRUD REST API for demo purposes powered by AWS SAM, API Gateway (HTTP API), Lambda Functions (node runtime), and DynamoDB
 
 ## Architecture
+
 ![note-api](https://user-images.githubusercontent.com/12616554/106798492-e6a5c480-6612-11eb-8be9-bdebc4ee5a73.png)
 
 ## Routes
+
 - GET /note - list all notes (using DDB `scan` for demo purposes, but you'd probably want to use `query` and paginate the results as this can be costly with a large table)
 - GET /note/{ id } - get a single note by `id`
 - POST /note - create note with `author` and `content`
@@ -13,6 +15,7 @@ A serverless CRUD REST API for demo purposes powered by AWS SAM, API Gateway (HT
 - DELETE /note/{ id } - delete a note by `id`
 
 ## Additional
+
 - Deploy this stack to your AWS account using the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started.html)
   - `sam build`
   - `sam deploy --guided`

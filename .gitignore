@@ -3,3 +3,4 @@ node_modules
 .aws-composer/
 samconfig.toml
 event.json
+env-vars.json

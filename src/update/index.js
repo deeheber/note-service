@@ -1,11 +1,14 @@
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, UpdateCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb')
+const {
+  DynamoDBDocumentClient,
+  UpdateCommand,
+} = require('@aws-sdk/lib-dynamodb')
 
-exports.handler = async event => {
+exports.handler = async (event) => {
   // Log the event argument for debugging and for use in local development.
-  console.log(JSON.stringify(event, undefined, 2));
-  const data = JSON.parse(event.body);
-  const id = event.pathParameters.id;
+  console.log(JSON.stringify(event, undefined, 2))
+  const data = JSON.parse(event.body)
+  const id = event.pathParameters.id
 
   const params = {
     TableName: process.env.TABLE_NAME,
@@ -14,35 +17,35 @@ exports.handler = async event => {
     ExpressionAttributeValues: {
       ':content': data.content,
       ':updatedAt': new Date().getTime().toString(),
-      ':id': id
+      ':id': id,
     },
     ConditionExpression: 'id = :id',
-    ReturnValues: 'ALL_NEW'
-  };
+    ReturnValues: 'ALL_NEW',
+  }
 
-  const client = new DynamoDBClient({ region: process.env.AWS_REGION });
-  const ddbDocClient = DynamoDBDocumentClient.from(client);
+  const client = new DynamoDBClient({ region: process.env.AWS_REGION })
+  const ddbDocClient = DynamoDBDocumentClient.from(client)
 
-  let response;
-  let statusCode;
+  let response
+  let statusCode
   try {
-    const { Attributes } = await ddbDocClient.send(new UpdateCommand(params));
+    const { Attributes } = await ddbDocClient.send(new UpdateCommand(params))
 
-    response = Attributes;
-    statusCode = 200;
+    response = Attributes
+    statusCode = 200
   } catch (err) {
-    console.log(`ERROR: ${JSON.stringify(err, undefined, 2)}`);
-    response = { message: err.message };
+    console.log(`ERROR: ${JSON.stringify(err, undefined, 2)}`)
+    response = { message: err.message }
 
     if (err.name === 'ConditionalCheckFailedException') {
-      response = { message: 'Item not found in the db, unable to update' };
+      response = { message: 'Item not found in the db, unable to update' }
     }
 
-    statusCode = err.$metadata ? err.$metadata.httpStatusCode : 500;;
+    statusCode = err.$metadata ? err.$metadata.httpStatusCode : 500
   }
 
   return {
     statusCode,
-    body: JSON.stringify(response)
-  };
-};
+    body: JSON.stringify(response),
+  }
+}
