@@ -6,6 +6,14 @@ exports.handler = async (event) => {
   // Log the event argument for debugging and for use in local development.
   console.log(JSON.stringify(event, undefined, 2))
   const data = JSON.parse(event.body)
+
+  if (!data.content || !data.author) {
+    return {
+      statusCode: 400,
+      body: 'Content and author are required fields',
+    }
+  }
+
   const input = {
     id: randomUUID(),
     content: data.content,
